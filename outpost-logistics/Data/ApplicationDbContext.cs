@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using outpost_logistics.Models;
 
 namespace outpost_logistics.Data
 {
@@ -9,5 +10,7 @@ namespace outpost_logistics.Data
             : base(options)
         {
         }
+        public virtual DbSet<Course>? Courses { get; set; }
+        public virtual DbSet<Vehicle>? Vehicles { get; set; }
     }
 }
