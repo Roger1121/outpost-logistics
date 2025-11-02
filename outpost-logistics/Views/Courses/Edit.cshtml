@@ -1,4 +1,5 @@
-﻿@model outpost_logistics.Models.Course
+﻿@using outpost_logistics.Commons
+@model outpost_logistics.Models.Course
 
 @{
     ViewData["Title"] = "Edycja kursu";
@@ -30,7 +31,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="VehicleId" class="control-label"></label>
-                <select asp-for="VehicleId" class="form-control" asp-items="ViewBag.VehicleId"></select>
+                <select asp-for="VehicleId" class="form-control">
+                    @foreach (var item in (IEnumerable<SelectListItemWithDate>)ViewBag.VehicleId)
+                    {
+                        <option value="@item.Value"
+                                data-estimated-course-end="@item.DataEstimatedCourseEnd.ToString("yyyy-MM-ddTHH:mm")">
+                            @item.Text
+                        </option>
+                    }
+                </select>
                 <span asp-validation-for="VehicleId" class="text-danger"></span>
             </div>
             <div class="form-group">

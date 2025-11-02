@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NarwianskiZakatek.Services;
 using outpost_logistics.Data;
+using outpost_logistics.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ICoursesService, CoursesService>();
+builder.Services.AddScoped<IVehiclesService, VehiclesService>();
 
 var app = builder.Build();
 

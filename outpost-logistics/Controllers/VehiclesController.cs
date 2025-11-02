@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using outpost_logistics.Data;
 using outpost_logistics.Models;
+using outpost_logistics.Services;
 
 namespace outpost_logistics.Controllers
 {
     [Authorize]
     public class VehiclesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IVehiclesService _vehiclesService;
 
-        public VehiclesController(ApplicationDbContext context)
+        public VehiclesController(IVehiclesService vehiclesService)
         {
-            _context = context;
+            _vehiclesService = vehiclesService;
         }
 
         // GET: Vehicles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vehicles.ToListAsync());
+            return View(_vehiclesService.Vehicles());
         }
 
         // GET: Vehicles/Details/5
@@ -35,8 +30,7 @@ namespace outpost_logistics.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicles
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var vehicle = _vehiclesService.FindById(id);
             if (vehicle == null)
             {
                 return NotFound();
@@ -60,8 +54,7 @@ namespace outpost_logistics.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(vehicle);
-                await _context.SaveChangesAsync();
+                _vehiclesService.AddVehicle(vehicle);
                 return RedirectToAction(nameof(Index));
             }
             return View(vehicle);
@@ -75,7 +68,7 @@ namespace outpost_logistics.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicles.FindAsync(id);
+            var vehicle = _vehiclesService.FindById(id);
             if (vehicle == null)
             {
                 return NotFound();
@@ -99,8 +92,7 @@ namespace outpost_logistics.Controllers
             {
                 try
                 {
-                    _context.Update(vehicle);
-                    await _context.SaveChangesAsync();
+                    _vehiclesService.UpdateVehicle(vehicle);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -126,8 +118,7 @@ namespace outpost_logistics.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicles
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var vehicle = _vehiclesService.FindById(id);
             if (vehicle == null)
             {
                 return NotFound();
@@ -141,19 +132,13 @@ namespace outpost_logistics.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vehicle = await _context.Vehicles.FindAsync(id);
-            if (vehicle != null)
-            {
-                _context.Vehicles.Remove(vehicle);
-            }
-
-            await _context.SaveChangesAsync();
+            _vehiclesService.DeleteById(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool VehicleExists(int id)
         {
-            return _context.Vehicles.Any(e => e.Id == id);
+            return _vehiclesService.ExistsById(id);
         }
     }
 }
