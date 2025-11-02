@@ -1,0 +1,48 @@
+﻿@model outpost_logistics.Models.Vehicle
+
+@{
+    ViewData["Title"] = "Dodaj pojazd";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Pojazd</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="LicensePlate" class="control-label"></label>
+                <input asp-for="LicensePlate" class="form-control" />
+                <span asp-validation-for="LicensePlate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxSpeed" class="control-label"></label>
+                <input asp-for="MaxSpeed" class="form-control" />
+                <span asp-validation-for="MaxSpeed" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxContinuousWorkTime" class="control-label"></label>
+                <input asp-for="MaxContinuousWorkTime" class="form-control" />
+                <span asp-validation-for="MaxContinuousWorkTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinRequiredBreakTime" class="control-label"></label>
+                <input asp-for="MinRequiredBreakTime" class="form-control" />
+                <span asp-validation-for="MinRequiredBreakTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Zapisz" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Powrót do listy</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,33 @@
+﻿<script>
+    $(document).ready(function () {
+        $('#StartDate').change(() => reloadVehicles());
+        $('#Distance').change(() => reloadVehicles());
+        $('#VehicleId').change(() => reloadEndDate());
+    });
+
+    function reloadVehicles() {
+        var startDate = $('#StartDate').val();
+        var distance = $('#Distance').val();
+        var courseId = $('#Id').val();
+        var vehicleSelect = $('#VehicleId');
+
+        if (startDate && distance) {
+            $.getJSON('/Courses/AvailableVehicles', { courseStart: startDate, distance: distance, currentCourseId: courseId }, function (data) {
+                vehicleSelect.empty();
+                $.each(data, function (i, vehicle) {
+                    vehicleSelect.append($('<option>')
+                        .val(vehicle.id)
+                        .text(vehicle.licensePlate)
+                        .attr('data-estimated-course-end', vehicle.estimatedCourseEnd));
+                });
+                reloadEndDate();
+            });
+        }
+    };
+
+    function reloadEndDate() {
+        var selectedOption = $('#VehicleId').find(':selected');
+        var estimatedCourseEnd = selectedOption.data('estimatedCourseEnd');
+        $('#EndDate').val(estimatedCourseEnd);
+    }
+</script>
