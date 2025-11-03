@@ -10,6 +10,7 @@ namespace outpost_logistics.Data
             : base(options)
         {
         }
+        public ApplicationDbContext() : base(new DbContextOptions<ApplicationDbContext>()) { }
         public virtual DbSet<Course>? Courses { get; set; }
         public virtual DbSet<Vehicle>? Vehicles { get; set; }
     }

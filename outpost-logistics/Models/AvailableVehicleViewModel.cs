@@ -7,5 +7,11 @@ namespace outpost_logistics.Models
         public int Id { get; set; }
         public string LicensePlate { get; set; } = string.Empty;
         public DateTime EstimatedCourseEnd{ get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            if (!(obj is AvailableVehicleViewModel viewModel)) return false;
+            return viewModel.Id == Id && viewModel.LicensePlate == LicensePlate && Equals(viewModel.EstimatedCourseEnd, EstimatedCourseEnd);
+        }
     }
 }

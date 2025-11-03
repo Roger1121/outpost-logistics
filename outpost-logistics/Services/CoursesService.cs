@@ -93,6 +93,10 @@ namespace outpost_logistics.Services
         {
             TimeSpan timeOfTravel = TimeSpan.FromHours(1.0 * distance / vehicle.MaxSpeed);
             int numberOfBreaks = (int)timeOfTravel.Divide(vehicle.MaxContinuousWorkTime);
+            if ((double)numberOfBreaks == timeOfTravel.Divide(vehicle.MaxContinuousWorkTime))
+            {
+                numberOfBreaks--;
+            }
             DateTime courseEnd = courseStart
                 // Add time of travel
                 .Add(timeOfTravel)
@@ -107,7 +111,7 @@ namespace outpost_logistics.Services
                          courseEnd.Hour, courseEnd.Minute, 0, courseEnd.Kind);
         }
 
-        private bool IsVehicleAvailable(int id, DateTime courseStart, DateTime estimatedCourseEnd, int? currentCourseId)
+        public bool IsVehicleAvailable(int id, DateTime courseStart, DateTime estimatedCourseEnd, int? currentCourseId)
         {
             bool isAvailable = _context.Courses
                     .Where(course => course.Id != currentCourseId && course.VehicleId == id && (course.StartDate <= estimatedCourseEnd && course.EndDate >= courseStart)).IsNullOrEmpty();
