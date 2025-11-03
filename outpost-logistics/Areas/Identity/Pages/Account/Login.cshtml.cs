@@ -121,7 +121,7 @@ namespace outpost_logistics.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Nieprawidłowy login lub hasło");
                     return Page();
                 }
             }

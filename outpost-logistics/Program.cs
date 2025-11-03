@@ -45,4 +45,15 @@ app.MapControllerRoute(
     pattern: "{controller=Courses}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+// Inicjalizacja bazy danych
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var db = services.GetRequiredService<ApplicationDbContext>();
+    if (db.Database.IsRelational())
+    {
+        db.Database.Migrate();
+    }
+}
+
 app.Run();
